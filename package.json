@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@safe-global/protocol-kit": "^5.2.2",
+    "ethers": "5"
+  }
+}

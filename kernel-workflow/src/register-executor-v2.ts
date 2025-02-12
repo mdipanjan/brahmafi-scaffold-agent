@@ -47,26 +47,26 @@ const registerExecutor = async (
   _executorMetadata: ExecutorMetadata,
   protocolKit: Safe
 ) => {
-  //  Generate message for signing
+  // 2. Generate message for signing
   const { domain, message, types } =
     await _consoleKit.automationContext.generateConsoleExecutorRegistration712Message(
       _chainId,
       _executorConfig
     );
-  //  Create Safe message
+  // 3. Create Safe message
   const safeMessage = await protocolKit.createMessage({
     types,
     domain,
     message,
   });
 
-  //  Sign with Safe (this will handle the signing process correctly)
+  // 4. Sign with Safe (this will handle the signing process correctly)
   const safeMessageWithSignature = await protocolKit.signMessage(
     safeMessage,
     SigningMethod.ETH_SIGN_TYPED_DATA_V4
   );
 
-  //  Get the encoded signatures from Safe
+  // 5. Get the encoded signatures from Safe
   const encodedSignatures = safeMessageWithSignature.encodedSignatures();
 
   try {
@@ -136,15 +136,14 @@ const registerExecutorOnKernel = async (
 };
 
 (async () => {
-  console.log("[start]");
   const consoleKit = new ConsoleKit(ConsoleApiKey, ConsoleBaseUrl);
 
   const provider = new ethers.JsonRpcProvider(JsonRpcUrl);
-  //  First deploy Safe
+  // 1. First deploy Safe
   const { safeAddress, protocolKit } = await deployNewSafe();
   console.log("[safe-provider]", safeAddress);
 
-  //  Create configs with Safe address
+  // 2. Create configs with Safe address
   const ExecutorConfigConsoleNew: ConsoleExecutorConfig = {
     clientId: ExecutorClientID,
     executor: safeAddress, // Use Safe address here
